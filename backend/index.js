@@ -1,9 +1,9 @@
 import express from "express";
 import {Server} from "socket.io";
-import HttpServer from "http";
+import {createServer} from "http";
 
 const app = express();
-const server = HttpServer.createServer(app);
+const server = createServer(app);
 // const server = server.createServer(app);
 const io = new Server(server);
 app.use((req,res,next)=>{
