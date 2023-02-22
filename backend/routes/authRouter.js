@@ -8,8 +8,6 @@ authRouter.post(
   storagePhotos.default.upload.single("profile-photo"),
   authController.createAccount
 );
-authRouter.post("/login", (req, res) => {
-  res.send("you are trying to login");
-});
+authRouter.post("/login", authController.login);
 
 export default authRouter;

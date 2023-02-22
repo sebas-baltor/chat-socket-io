@@ -1,10 +1,10 @@
-import mongoose, { Model, Schema } from "mongoose";
+import mongoose from "mongoose";
 const UserSchema = mongoose.Schema({
     name:{
         type:String,
         required: true,
     },
-    lastName:{
+    lastname:{
         type:String,
         required:true
     },
@@ -17,6 +17,14 @@ const UserSchema = mongoose.Schema({
         require:true
     },
     phone:{
+        type:String,
+        required:true
+    },
+    password:{
+        type:String,
+        required:true
+    },
+    email:{
         type:String,
         required:true
     }

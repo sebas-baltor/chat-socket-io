@@ -14,13 +14,15 @@ const app = express();
 const server = createServer(app);
 const io = new Server(server, { cors: "http://localhost:5173/" });
 mongoose.set("strictQuery", true);
-// const connection = mongoose
-//   .connect(process.env.MONGO_DB_CONNECTION, {
-//     useNewUrlParser: true,
-//     useUnifiedTopology: true,
-//     dbName: "test",
-//   })
-//   .catch((err) => console.log(err));
+mongoose
+  .connect(process.env.MONGO_DB_CONNECTION, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => {
+    console.log("success db connection");
+  })
+  .catch((err) => console.log(err));
 // const storage = new GridFsStorage({
 //   db: connection,
 //   // file: (req, file) => {
@@ -41,8 +43,8 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 // Middleware router
-app.use("/",userRouter);
-app.use("/",authRouter);
+app.use("/", userRouter);
+app.use("/", authRouter);
 
 io.on("connection", (socket) => {
   console.log(`⚡ cliente connectado con id: ${socket.id}`);
