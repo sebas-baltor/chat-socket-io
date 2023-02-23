@@ -12,7 +12,7 @@ authController.createAccount = async (req, res) => {
       lastname,
       phone,
       password: hashPassword,
-      imgPath: `/profile-photo/${req.file.filename}`,
+      imgPath: `user/profile-photo/${req.file.filename}`,
       email,
     });
     const savedUser = await user.save();
@@ -28,32 +28,22 @@ authController.createAccount = async (req, res) => {
 };
 authController.login = async (req, res) => {
   let { password, email } = req.body;
-  const storedUser = await User.findOne({ email }).exec();
-//     console.log(storedUser);
-//   if (storedUser === null) {
-//     return res
-//       .status(400)
-//       .json({ message: "not user exist", redirectTo: "no" });
-//   }
-
-  const match = await bcrypt.compare(password, storedUser.password);
+  const user = await User.findOne({ email }).exec();
+  const match = await bcrypt.compare(password, user.password);
   if (!match) {
-    return res.status(400).json({
+    return res.status(404).json({
       message: "email or password wrong",
       redirectTo: "no",
     });
   }
-  let token = jwt.sign({ id: storedUser._id }, process.env.JWT_SECRET_KEY);
-
+  let token = jwt.sign({ id: user._id }, process.env.JWT_SECRET_KEY);
+  delete user.password;
   return res.status(200).json({
     message: "success login",
     redirectTo: "/home",
     data: {
       token,
-      user: {
-        name: storedUser.name,
-        lastname: storedUser.lastname,
-      },
+      user
     },
   });
 };

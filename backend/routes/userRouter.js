@@ -1,18 +1,21 @@
-import User from "../models/User.js";
 import { Router } from "express";
+import userController from "../controllers/userController.js";
+import middleware from "../middleware/index.js";
 const userRouter = Router();
-userRouter.post("/create", async (req,res) => {
-  const newUser = new User({
-    name: "Steven",
-    lastName: "Jhones",
-    phone: "5567923289",
-    imgPath: "/someinternerUrl",
-    friends:["63efec009d5d525700148405","63efec2fb98a5ac0b8ad9b98"]
-  });
-  const savedUser = await newUser.save();
-  console.log(`User created ${savedUser}`);
-  res.json("successfull creation").status(200)
-});
-// userRouter.get("/create")
 
+// Get
+userRouter.get("/:id", middleware.verifyToken, userController.getById);
+userRouter.get("/profile-photo/:filename", userController.profilePhoto); // no middleware required
+userRouter.get("/friends/:id",middleware.verifyToken,userController.getFriends)
+// Patch
+userRouter.patch(
+  "/friend-request/:id/:friendId",
+  middleware.verifyToken,
+  userController.friendRequest
+);
+userRouter.patch(
+  "/friend-remove/:id/:friendId",
+  middleware.verifyToken,
+  userController.removeFriendship
+);
 export default userRouter;
