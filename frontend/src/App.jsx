@@ -9,7 +9,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Chat />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/create-account" element={<CreateAccount />} />
+          <Route path="/crear-cuenta" element={<CreateAccount />} />
         </Routes>
       </BrowserRouter>
     </div>

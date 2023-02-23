@@ -5,7 +5,7 @@ const authRouter = Router();
 
 authRouter.post(
   "/create-account",
-  upload.single("profile-photo"),
+  upload.single("profilePhoto"),
   authController.createAccount
 );
 authRouter.post("/login", authController.login);
