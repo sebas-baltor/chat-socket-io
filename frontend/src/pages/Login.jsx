@@ -3,7 +3,7 @@ import * as Yup from "yup";
 import styles from "../style";
 function Login() {
   return (
-    <div className={`${styles.flexCenter} ${styles.paddings} h-screen`}>
+    <div className={`${styles.flexCenter} ${styles.paddings} min-h-screen`}>
       <div className="flex flex-col gap-12 p-4 max-w-[500px] mx-auto w-full bg-slate-50 rounded-lg">
         <h1 className="font-black text-4xl text-center">Login</h1>
         <Formik

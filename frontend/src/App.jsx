@@ -4,7 +4,7 @@ import CreateAccount from "./pages/CreateAccount";
 import Chat from "./pages/Chat";
 function App() {
   return (
-    <div>
+    <>
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Chat />} />
@@ -12,7 +12,7 @@ function App() {
           <Route path="/crear-cuenta" element={<CreateAccount />} />
         </Routes>
       </BrowserRouter>
-    </div>
+    </>
   );
 }
 

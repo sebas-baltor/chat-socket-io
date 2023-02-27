@@ -6,8 +6,8 @@ function CreateAccount() {
   const phoneNumberRegExp =
     /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
   return (
-    <div className={`${styles.paddings} h-screen ${styles.flexCenter}`}>
-      <div className="flex flex-col gap-12 p-4 w-full max-w-[500px] bg-slate-50 rounded-lg">
+    <div className={`${styles.paddings} min-h-screen ${styles.flexCenter}`}>
+      <div className="flex flex-col gap-12 p-4 w-full max-w-[700px] bg-slate-50 rounded-lg">
         <h1 className="text-4xl font-black text-center">Crear cuenta</h1>
         <Formik
           initialValues={{
@@ -38,7 +38,7 @@ function CreateAccount() {
             console.log(values);
           }}
         >
-          <Form className="flex flex-col gap-4">
+          <Form className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <label>
               <span className="font-bold text-slate-700">Nombre</span>
               <Field
@@ -94,8 +94,8 @@ function CreateAccount() {
                 <ErrorMessage name="password" />
               </span>
             </label>
-            <label>
-            <span className="font-bold text-slate-700">Foto de perfil</span>
+            <label className="sm:col-span-2">
+              <span className="font-bold text-slate-700">Foto de perfil</span>
               <Dropzone onDrop={(acceptedFiles) => console.log(acceptedFiles)}>
                 {({ getRootProps, getInputProps }) => (
                   <section className="w-full h-18 border-dotted border-2 border-violet-200 p-4 hover:bg-violet-50">
@@ -106,25 +106,18 @@ function CreateAccount() {
                         name="profilePhoto"
                       />
                       <p className="text-center opacity-50">
-                        arrastra o clickea para agregar un archivo
+                        arrastrala aqui!! o has click
                       </p>
                     </div>
                   </section>
                 )}
               </Dropzone>
             </label>
-            {/* <label>
-              <span className="font-bold text-slate-700">Foto de perfil</span>
-              <Field name="profilePhoto" type="file" />
-              <span className="text-red-400 text-xs">
-                <ErrorMessage name="profilePhoto" />
-              </span>
-            </label> */}
             <button
               type="submit"
-              className="px-3 py-2 rounded bg-violet-400 text-white w-1/2 lg:w-1/3 mx-auto"
+              className="px-3 py-2 rounded bg-violet-400 text-white w-1/2 lg:w-1/3 mx-auto sm:col-span-2"
             >
-              Enviar
+              Crear
             </button>
           </Form>
         </Formik>
