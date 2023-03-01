@@ -6,6 +6,14 @@ authController.createAccount = async (req, res) => {
   try {
     let saltRounds = 10;
     let { name, lastname, phone, password, email } = req.body;
+    const userDb = await User.findOne({email});
+    if(userDb){
+      console.log("repetido")
+      return res.status(406).json({
+        message: "tu correo ya ha sido utilizado",
+        redirectTo: "",
+      });
+    }
     let hashPassword = await bcrypt.hash(password, saltRounds);
     const user = new User({
       name,
@@ -16,7 +24,7 @@ authController.createAccount = async (req, res) => {
       email,
     });
     const savedUser = await user.save();
-    console.log(savedUser);
+    console.log("guardado");
     res.json({ status: 200, message: "success update", redirectTo: "/login" });
   } catch (err) {
     res.status(500).json({
