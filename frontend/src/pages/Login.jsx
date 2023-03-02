@@ -1,13 +1,23 @@
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import styles from "../style";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { setLogin } from "../redux";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 function Login() {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const [serverError, setServerError] = useState("");
   return (
     <div className={`${styles.flexCenter} ${styles.paddings} min-h-screen`}>
       <div className="flex flex-col gap-12 p-4 max-w-[500px] w-full bg-slate-50 rounded-lg">
         <h1 className="font-black text-4xl text-center">Login</h1>
+        {serverError ? (
+          <div className="text-red-300 text-center">{serverError}</div>
+        ) : (
+          " "
+        )}
         <Formik
           initialValues={{
             email: "",
@@ -19,8 +29,20 @@ function Login() {
               .required("campo requerido"),
             password: Yup.string().required("campo requerido"),
           })}
-          onSubmit={(values, { setSubmitting }) => {
-            console.log(values);
+          onSubmit={async (values, { setSubmitting }) => {
+            let res = await fetch("http://localhost:3000/login", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(values),
+            });
+            let data = await res.json();
+            if (res.status !== 200) {
+              return setServerError(data.message);
+            }
+            dispatch(setLogin(data.data));
+            navigate("/");
           }}
         >
           <Form className="flex flex-col gap-4">
@@ -42,6 +64,7 @@ function Login() {
                 type="password"
                 className="w-full p-2 outline-none border-0 rounded border-2 border-violet-200 hover:bg-violet-50 focus:border-violet-400"
               />
+
               <span className="text-red-400 text-xs">
                 <ErrorMessage name="password" />
               </span>
@@ -54,12 +77,12 @@ function Login() {
             </button>
           </Form>
         </Formik>
-          <div className="opacity-70 text-center">
-            Si aún no tienes cuenta{" "}
-            <a href="/crear-cuenta" className="text-violet-400">
-              Crea una.
-            </a>
-          </div>
+        <div className="opacity-70 text-center">
+          Si aún no tienes cuenta{" "}
+          <a href="/crear-cuenta" className="text-violet-400">
+            Crea una.
+          </a>
+        </div>
       </div>
     </div>
   );

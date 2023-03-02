@@ -36,11 +36,18 @@ authController.createAccount = async (req, res) => {
 };
 authController.login = async (req, res) => {
   let { password, email } = req.body;
-  const user = await User.findOne({ email }).exec();
+  const user = await User.findOne({ email });
+  console.log(user)
+  if(!user){
+    return res.status(404).json({
+      message: "no tienes cuenta",
+      redirectTo: "",
+    });
+  }
   const match = await bcrypt.compare(password, user.password);
   if (!match) {
     return res.status(404).json({
-      message: "email or password wrong",
+      message: "email o contraseña incorrectos",
       redirectTo: "no",
     });
   }

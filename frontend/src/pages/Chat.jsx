@@ -4,6 +4,7 @@ import styles from "../style";
 import Contact from "../components/Contact";
 import {Formik,Field,Form,ErrorMessage} from "formik";
 import * as Yup from "yup";
+import { useSelector } from "react-redux";
 
 const socket = io("http://localhost:3000");
 
@@ -49,6 +50,8 @@ function Chat (){
   //     </button>
   //   </div>
   // );
+  const state = useSelector((state)=>state)
+  console.log(state)
   return (
     <section className={`${styles.paddings} h-screen min-h-screen max-h-screen ${styles.flexCenter}`}>
       <div className={`${styles.innerWidth} mx-auto grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 grid-rows-1 relative h-full`}> {/* display hidden*/}
