@@ -24,7 +24,6 @@ authController.createAccount = async (req, res) => {
       email,
     });
     const savedUser = await user.save();
-    console.log("guardado");
     res.json({ status: 200, message: "success update", redirectTo: "/login" });
   } catch (err) {
     res.status(500).json({
@@ -36,7 +35,7 @@ authController.createAccount = async (req, res) => {
 };
 authController.login = async (req, res) => {
   let { password, email } = req.body;
-  const user = await User.findOne({ email });
+  const user = await User.findOne({ email }).populate("request","_id name lastname imgPath").populate("friends");
   console.log(user)
   if(!user){
     return res.status(404).json({
