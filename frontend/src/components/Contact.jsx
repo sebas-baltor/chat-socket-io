@@ -1,11 +1,20 @@
-export default function Contact(){
-    return (
-        <div className="w-full rounded-lg bg-slate-200 flex gap-3 items-center">
-            <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="user" className="object-cover w-14 h-14 rounded-full"/>
-            <div>
-                <h5 className="font-black">Nombre</h5>
-                <p>last mssg</p>
-            </div>
-        </div>
-    )
+export default function Contact({ friend, refFriendSection }) {
+  return (
+    <div
+      className="w-full rounded-lg bg-slate-200 flex gap-3 items-center px-3 py-1 cursor-pointer"
+      onClick={() => {
+        refFriendSection.current.classList.remove("translate-x-full");
+      }}
+    >
+      <img
+        src={`http://localhost:3000/${friend.imgPath}`}
+        alt={`${friend.name}`}
+        className="object-cover w-12 h-12 rounded-full"
+      />
+      <div>
+        <h5 className="font-black">{friend.name}</h5>
+        <p>last mssg</p>
+      </div>
+    </div>
+  );
 }
