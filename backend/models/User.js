@@ -8,10 +8,12 @@ const UserSchema = mongoose.Schema({
         type:String,
         required:true
     },
-    friends:{
-        type:Array,
-        required:false
-    },
+    friends:[
+        {
+            type:mongoose.Types.ObjectId,
+            ref:"User"
+        }
+    ],
     imgPath:{
         type:String,
         require:true
@@ -27,10 +29,12 @@ const UserSchema = mongoose.Schema({
     email:{
         type:String,
         required:true
-    },request:{
-        type:Array,
-        required:false
-    }
+    },request:[
+        {
+            type:mongoose.Types.ObjectId,
+            ref:"User"
+        }
+    ]
 
 })
 
