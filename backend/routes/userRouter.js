@@ -7,6 +7,7 @@ const userRouter = Router();
 userRouter.get("/:id", middleware.verifyToken, userController.getById);
 userRouter.get("/profile-photo/:filename", userController.profilePhoto); // no middleware required
 userRouter.get("/friends/:id",middleware.verifyToken,userController.getFriends)
+userRouter.get("/find-people/:name/:lastname?",middleware.verifyToken,userController.findPeople)
 // Patch
 userRouter.patch(
   "/friend-request/:id/:friendId",
