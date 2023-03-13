@@ -106,7 +106,7 @@ function Chat() {
         <div
           className={`grid sm:grid-cols-3 lg:grid-cols-4 grid-rows-1 relative h-[90%]`}
         >
-          <div className="bg-white absolute top-0 right-full sm:static p-3 h-full w-1/2 sm:w-full shadow-lg sm:shadow-none z-10 sm:translate-x-0" ref={friendSection}>
+          <div className="bg-white absolute top-0 right-full sm:static p-3 h-full w-full shadow-lg sm:shadow-none z-10 sm:translate-x-0" ref={friendSection}>
             <div className="font-bold py-2 border-2 border-violet-400 bg-violet-400 text-white text-center mb-3">
               Tus amigos
             </div>
@@ -116,9 +116,9 @@ function Chat() {
               ))}
             </div>
           </div>
-          <div className="relative col-span-2 bg-slate-100">
+          <div className="relative col-span-2 bg-slate-100 max-h-full">
             <div
-              className="h-[90%] max-h-[90%] p-3 overflow-y-auto "
+              className="h-[90%] max-h-[90%] m-3 overflow-y-auto"
             >
               <div className="grid grid-cols-2 content-end gap-3" ref={chatRef}>
                 <div className="col-span-2  max-w-[70%] justify-self-start">
@@ -145,7 +145,7 @@ function Chat() {
                 </div>
               </div>
             </div>
-            <div className="h-[10%] bg-slate-200">
+            <div className="h-12 bg-slate-200">
               <Formik
                 initialValues={{ mssg: "" }}
                 onSubmit={(values, { resetForm }) => {
@@ -187,7 +187,7 @@ function Chat() {
               </Formik>
             </div>
           </div>
-          <div className="bg-white absolute top-0 left-full lg:static p-2 w-1/2 lg:w-full shadow-lg lg:shadow-none h-full lg:translate-x-0" ref={connectSection}>
+          <div className="bg-white absolute top-0 left-full lg:static p-2 w-full md:w-1/2 lg:w-full shadow-lg lg:shadow-none h-full lg:translate-x-0" ref={connectSection}>
             <div className="bg-slate-50 mb-3">
               <button
                 ref={connectBtn}
