@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import io from "socket.io-client";
 import styles from "../style";
 import Contact from "../components/Contact";
@@ -11,9 +11,12 @@ import { MdSend } from "react-icons/md";
 import { BsPlusSquareDotted } from "react-icons/bs";
 import { SlOptionsVertical } from "react-icons/sl";
 import Request from "../components/Requests";
-// const socket = io("http://localhost:3000");
+const socket = io("http://localhost:3000");
 
 function Chat() {
+  const { token, findedPeople, imgPath, user, activeChat } = useSelector(
+    (state) => state
+  );
   const chatRef = useRef(null);
   const dispatch = useDispatch();
   const [findMssg, setFindMssg] = useState(null);
@@ -23,59 +26,42 @@ function Chat() {
   const requestBtn = useRef(null);
   const connectSection = useRef(null);
   const friendSection = useRef(null);
-  // const token = useSelector(state=>state.token);
-  //   const [count, setCount] = useState(0);
-  // const [connect, setConnect] = useState("no conectado");
-  // useEffect(() => {
-  //   socket.on("connection", (socket) => {
-  //     setConnect("conectado");
-  //     console.log(socket.id)
-  //   });
-  //   socket.on("count", () => {
-  //     console.log("cambio la cuenta");
-  //   });
-  //   return ()=>{
-  //     socket.off("connection");
-  //     socket.off("count");
-  //   }
-  // }, []);
-  // return (
-  //   <div>
-  //     chat {count}
-  //     <br />
-  //     {connect}
-  //     <br />
-  //     <button
-  //       className="bg-sky-100 rounded-full p-4"
-  //       onClick={() => {
-  //         setCount(count + 1);
-  //       }}
-  //     >
-  //       aumentar contador
-  //     </button>
-  //     <button
-  //       className="bg-orange-200 rounded-full p-4"
-  //       onClick={(e) => {
-  //         e.preventDefault();
-  //         socket.emit("count", count);
-  //         // socket.off("count");
-  //       }}
-  //     >
-  //       Enviar valor contador
-  //     </button>
-  //   </div>
-  // );
-  const { token, findedPeople, imgPath, user } = useSelector((state) => state);
-  // console.log(token);
+
+  useEffect(() => {
+    socket.on("connection", (socket) => {
+      console.log("connectado");
+    });
+    socket.on(user._id, (socket) => {
+      console.log("envio un mensaje con exito" + socket);
+
+      let div = document.createElement("div");
+      let p = document.createElement("p");
+      div.classList.add("col-span-2", "max-w-[70%]", "justify-self-start");
+      p.classList.add("bg-white", "px-2", "py-1", "rounded-lg");
+      p.innerText = socket.message;
+      div.append(p);
+      chatRef.current.append(div);
+    });
+    return () => {
+      socket.off("connection");
+      socket.off(user._id);
+    };
+  }, []);
+
   return (
     <section
       className={`${styles.paddings} h-screen min-h-[90vh] max-h-screen ${styles.flexCenter}`}
     >
-      <div className={`${styles.innerWidth} mx-auto h-[90vh] overflow-x-hidden`}>
+      <div
+        className={`${styles.innerWidth} mx-auto h-[90vh] overflow-x-hidden`}
+      >
         <div className="bg-violet-400 flex justify-between items-center px-3 py-1 mb-1">
-          <button className="text-white sm:hidden" onClick={()=>{
-            friendSection.current.classList.toggle("translate-x-full");
-          }}>
+          <button
+            className="text-white sm:hidden"
+            onClick={() => {
+              friendSection.current.classList.toggle("translate-x-full");
+            }}
+          >
             <BsPlusSquareDotted />
           </button>
           <div className="text-white flex gap-3 items-center relative group">
@@ -97,52 +83,39 @@ function Chat() {
               </button>
             </div>
           </div>
-          <button className="text-white lg:hidden" onClick={()=>{
-            connectSection.current.classList.toggle("-translate-x-full");
-          }}>
+          <button
+            className="text-white lg:hidden"
+            onClick={() => {
+              connectSection.current.classList.toggle("-translate-x-full");
+            }}
+          >
             <SlOptionsVertical />
           </button>
         </div>
         <div
           className={`grid sm:grid-cols-3 lg:grid-cols-4 grid-rows-1 relative h-[90%]`}
         >
-          <div className="bg-white absolute top-0 right-full sm:static p-3 h-full w-full shadow-lg sm:shadow-none z-10 sm:translate-x-0" ref={friendSection}>
+          <div
+            className="bg-white absolute top-0 right-full sm:static p-3 h-full w-full shadow-lg sm:shadow-none z-10 sm:translate-x-0"
+            ref={friendSection}
+          >
             <div className="font-bold py-2 border-2 border-violet-400 bg-violet-400 text-white text-center mb-3">
               Tus amigos
             </div>
             <div className="flex flex-col gap-3 overflow-y-auto max-h-full ">
               {user.friends.map((friend) => (
-                <Contact friend={friend} key={friend._id} refFriendSection={friendSection} />
+                <Contact
+                  friend={friend}
+                  key={friend._id}
+                  refFriendSection={friendSection}
+                />
               ))}
             </div>
           </div>
           <div className="relative col-span-2 bg-slate-100 max-h-full">
-            <div
-              className="h-[90%] max-h-[90%] m-3 overflow-y-auto"
-            >
+            <div className="h-[90%] max-h-[90%] m-3 overflow-y-auto">
               <div className="grid grid-cols-2 content-end gap-3" ref={chatRef}>
-                <div className="col-span-2  max-w-[70%] justify-self-start">
-                  <p className="bg-white px-2 py-1 rounded-lg">hola</p>
-                </div>
-                <div className="col-span-2 max-w-[70%] justify-self-end">
-                  <p className="bg-violet-400 text-white px-2 py-1 rounded-lg">
-                    adios, pero como has estado? Lorem ipsum dolor, sit amet
-                    consectetur adipisicing elit. Omnis similique tenetur sunt,
-                    accusantium dolor iure esse sit laboriosam neque
-                    necessitatibus?
-                  </p>
-                </div>
-                <div className="col-span-2 max-w-[70%] justify-self-start">
-                  <p className="bg-white px-2 py-1 rounded-lg">
-                    Que tal como te ha hido Lorem ipsum dolor sit amet
-                    consectetur, adipisicing elit. Neque illum ullam facere,
-                    soluta ipsa corporis nesciunt dolorem dolore in error iste
-                    voluptates quis sequi nihil ratione aliquid dolorum eos
-                    natus dolor! Iusto reiciendis veniam vel, omnis ex aperiam
-                    officia beatae nemo natus accusamus minus, at perspiciatis
-                    ipsum itaque eveniet quam.
-                  </p>
-                </div>
+                
               </div>
             </div>
             <div className="h-12 bg-slate-200">
@@ -166,6 +139,8 @@ function Chat() {
                   p.innerText = values.mssg;
                   div.append(p);
                   chatRef.current.append(div);
+                  let message = { friendId: activeChat, message: values.mssg,myId:user._id };
+                  socket.emit("message", message);
                   resetForm();
                 }}
                 validationSchema={Yup.object({
@@ -187,7 +162,10 @@ function Chat() {
               </Formik>
             </div>
           </div>
-          <div className="bg-white absolute top-0 left-full lg:static p-2 w-full md:w-1/2 lg:w-full shadow-lg lg:shadow-none h-full lg:translate-x-0" ref={connectSection}>
+          <div
+            className="bg-white absolute top-0 left-full lg:static p-2 w-full md:w-1/2 lg:w-full shadow-lg lg:shadow-none h-full lg:translate-x-0"
+            ref={connectSection}
+          >
             <div className="bg-slate-50 mb-3">
               <button
                 ref={connectBtn}
